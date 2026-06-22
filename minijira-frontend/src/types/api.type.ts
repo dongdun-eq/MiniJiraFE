@@ -9,7 +9,7 @@ export interface PaginationType {
   totalPages: number;
 }
 
-export interface PaginatedResponse<T> {
+export interface ListResponse<T> {
   data: T[];
   pagination: PaginationType;
 }

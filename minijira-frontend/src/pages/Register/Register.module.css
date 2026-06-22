@@ -1,0 +1,179 @@
+.registerContainer {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  padding: var(--space-4) var(--space-2);
+}
+
+.registerCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-6) var(--space-6);
+}
+
+/* --- Header --- */
+.registerHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.logoMark {
+  width: 38px;
+  height: 38px;
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-3);
+}
+
+.registerTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.4px;
+}
+
+.registerSubtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* --- Form --- */
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.inputLabel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.inputField {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.inputField::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* --- Validation Errors --- */
+.inputField.inputError {
+  border-color: var(--priority-high);
+}
+
+.inputField.inputError:focus {
+  border-color: var(--priority-high);
+  box-shadow: 0 0 0 1px var(--priority-high);
+}
+
+.errorText {
+  font-size: var(--text-sm);
+  color: var(--priority-high);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* --- Password Custom --- */
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInput {
+  padding-right: 50px;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: var(--space-3);
+  background: none;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.passwordToggle:hover {
+  color: var(--color-accent);
+}
+
+/* --- Submit Button --- */
+.submitBtn {
+  width: 100%;
+  height: 40px;
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  margin-top: var(--space-2);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Footer Redirect --- */
+.loginRedirect {
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+}
+
+.loginRedirect a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.loginRedirect a:hover {
+  text-decoration: underline;
+}

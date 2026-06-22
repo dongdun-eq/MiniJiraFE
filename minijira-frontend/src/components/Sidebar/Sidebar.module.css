@@ -6,8 +6,7 @@
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden; /* Thay thành hidden để ghim footer cố định ở đáy */
   transition:
     transform var(--transition-base),
     width var(--transition-base);
@@ -56,6 +55,7 @@
 .navSection {
   padding: var(--space-4) var(--space-3);
   flex: 1;
+  overflow-y: auto; /* Thêm vào đây để chỉ cuộn riêng phần danh sách menu */
 }
 
 .navLabel {
@@ -117,6 +117,49 @@
   flex: 1;
 }
 
+/* ---- FOOTER & LOGIN BUTTON (THÊM MỚI) ---- */
+.sidebarFooter {
+  margin-top: auto; /* Đẩy toàn bộ phần này xuống dưới cùng */
+  padding: var(--space-4) var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.loginBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+  user-select: none;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.loginBtn:hover {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+.loginBtn svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.loginBtn:hover svg {
+  opacity: 1;
+}
+
+/* ---- Responsive ---- */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;

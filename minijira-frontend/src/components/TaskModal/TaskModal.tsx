@@ -9,6 +9,8 @@ import TaskModalDueDateField from "./TaskModalDueDateField";
 import TaskModalPriorityField from "./TaskModalPriorityField";
 import { FormProvider, useForm } from "react-hook-form";
 import type { Priority, Status } from "../../types";
+import { useUsers } from "../../hooks/user.hook";
+import { useTaskMutations } from "../../hooks/task.hook";
 
 /* ---- Types ---- */
 export interface TaskFormData {
@@ -47,8 +49,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
 }) => {
   const isEdit = Boolean(initialData?.id);
 
-  const [loading, setLoading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const { data: users } = useUsers();
+
+  const { createTask, isCreating, updateTask, isUpdating } = useTaskMutations(
+    {},
+  );
 
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -102,14 +109,16 @@ const TaskModal: React.FC<TaskModalProps> = ({
 
   if (!isOpen) return null;
 
-  const onSubmit = async () => {
-    setLoading(true);
+  const onSubmit = async (data: TaskFormData) => {
     try {
-      console.log("Successfully");
-      console.log(methods.formState);
+      if (!isEdit) {
+        createTask({ ...data });
+      } else {
+        updateTask({ id: initialData?.id ?? "", dto: { ...data } });
+      }
       onClose();
-    } finally {
-      setLoading(false);
+    } catch {
+      console.log("Error when " + isEdit ? "updating" : "creating");
     }
   };
 
@@ -153,7 +162,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               </div>
 
               {/* Assignee */}
-              <TaskModalAssigneeField />
+              <TaskModalAssigneeField users={users?.data ?? null} />
             </div>
 
             {/* Footer */}
@@ -162,7 +171,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               setConfirmDelete={setConfirmDelete}
               handleDelete={handleDelete}
               isEdit={isEdit}
-              loading={loading}
+              loading={isCreating || isUpdating}
               onClose={onClose}
               onDelete={onDelete}
             />

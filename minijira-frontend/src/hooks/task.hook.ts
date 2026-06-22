@@ -7,7 +7,7 @@ import type {
   UpdateTaskStatusDto,
 } from "../types/task.type";
 import taskService from "../service/task.service";
-import type { PaginatedResponse } from "../types/api.type";
+import type { ListResponse } from "../types/api.type";
 
 export const useTasks = (params: TaskQueryParam) => {
   return useQuery({
@@ -54,7 +54,7 @@ export const useTaskMutations = (params: TaskQueryParam) => {
       const previousTasks = queryClient.getQueryData(queryKey);
       queryClient.setQueryData(
         queryKey,
-        (oldData: PaginatedResponse<DetailTaskType>) => {
+        (oldData: ListResponse<DetailTaskType>) => {
           const newArray = oldData.data.map((task) =>
             task.id === id
               ? { ...task, status: dto.status, position: dto.position }

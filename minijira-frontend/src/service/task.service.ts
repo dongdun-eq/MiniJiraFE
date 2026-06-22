@@ -1,4 +1,4 @@
-import type { PaginatedResponse, SingleResponse } from "../types/api.type";
+import type { ListResponse, SingleResponse } from "../types/api.type";
 import type {
   CreateTaskDto,
   DetailTaskType,
@@ -15,8 +15,8 @@ const taskService = {
   getAll: async (
     queryParam: TaskQueryParam,
     signal?: AbortSignal,
-  ): Promise<PaginatedResponse<DetailTaskType>> => {
-    const res = await api.get<PaginatedResponse<DetailTaskType>>(BASE, {
+  ): Promise<ListResponse<DetailTaskType>> => {
+    const res = await api.get<ListResponse<DetailTaskType>>(BASE, {
       params: { ...queryParam },
       signal,
     });

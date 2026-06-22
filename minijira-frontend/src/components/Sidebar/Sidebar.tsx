@@ -1,4 +1,11 @@
-import { IconChart, IconList, IconSettings, LayoutGrid } from "../Icons/Icons";
+import { useNavigate } from "react-router-dom";
+import {
+  IconChart,
+  IconList,
+  IconLogin,
+  IconSettings,
+  LayoutGrid,
+} from "../Icons/Icons";
 import styles from "./Sidebar.module.css";
 
 const navItems = [
@@ -10,12 +17,19 @@ const navItems = [
 
 interface Props {
   sidebarOpen: boolean;
-  closeSidebar: () => void
+  closeSidebar: () => void;
 }
 
 const Sidebar = ({ sidebarOpen, closeSidebar }: Props) => {
+  const navigate = useNavigate();
+
+  const toLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <aside className={`${styles.sidebar} ${sidebarOpen ? styles.open : ""}`}>
+      {/* Top: Logo */}
       <div className={styles.sidebarLogo}>
         <div className={styles.logoMark}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -34,6 +48,7 @@ const Sidebar = ({ sidebarOpen, closeSidebar }: Props) => {
         </div>
       </div>
 
+      {/* Middle: Navigation */}
       <nav className={styles.navSection}>
         <div className={styles.navLabel}>Planning</div>
         {navItems.map((item) => (
@@ -47,6 +62,14 @@ const Sidebar = ({ sidebarOpen, closeSidebar }: Props) => {
           </button>
         ))}
       </nav>
+
+      {/* --- BOTTOM: FOOTER (NÚT ĐĂNG NHẬP THÊM Ở ĐÂY) --- */}
+      <div className={styles.sidebarFooter}>
+        <button className={styles.loginBtn} onClick={toLogin}>
+          <IconLogin />
+          <span className={styles.navItemText}>Log In</span>
+        </button>
+      </div>
     </aside>
   );
 };

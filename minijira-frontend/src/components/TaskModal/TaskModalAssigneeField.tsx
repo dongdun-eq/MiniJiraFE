@@ -1,9 +1,14 @@
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { ASSIGNEES } from "../../data/taskModalStaticData";
 import { IconCheck } from "../Icons/Icons";
 import styles from "./TaskModal.module.css";
+import type { UserType } from "../../types/user.type";
+import { getInitials } from "../../utils/nameUtils";
 
-const TaskModalAssigneeField = () => {
+interface Props {
+  users: UserType[] | null;
+}
+
+const TaskModalAssigneeField = ({ users }: Props) => {
   const { control } = useFormContext();
 
   const assigneeValue = useWatch({
@@ -23,7 +28,7 @@ const TaskModalAssigneeField = () => {
             role="group"
             aria-label="Assignee"
           >
-            {ASSIGNEES.map((a) => {
+            {users && users.map((a) => {
               const selected = assigneeValue === a.id;
               return (
                 <button
@@ -35,10 +40,8 @@ const TaskModalAssigneeField = () => {
                   }
                   aria-pressed={selected}
                 >
-                  <div
-                    className={`${styles.assigneeAvatar} ${styles[`avatarColor${a.colorIdx}`]}`}
-                  >
-                    {selected ? <IconCheck /> : a.initials}
+                  <div className={`${styles.assigneeAvatar}`}>
+                    {selected ? <IconCheck /> : getInitials(a.name)}
                   </div>
                   {a.name.split(" ")[0]}
                 </button>

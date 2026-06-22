@@ -1,16 +1,12 @@
 import React from "react";
-import styles from "./TaskCard.module.css";
-import { getInitials } from "../../utils/nameUtils";
-import { checkIsOverdue } from "../../helpers/task.helper";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { IconDragHandle } from "../Icons/Icons";
 import type { DetailTaskType } from "../../types/task.type";
+import styles from "./TaskCard.module.css";
+import { checkIsOverdue } from "../../helpers/task.helper";
+import { getInitials } from "../../utils/nameUtils";
 
 interface TaskCardProps {
   task: DetailTaskType;
   onClick?: (task: DetailTaskType) => void;
-  dragOverlay?: boolean;
 }
 
 const PRIORITY_STYLE: Record<string, string> = {
@@ -27,46 +23,35 @@ const PRIORITY_LABEL: Record<string, string> = {
   low: "Low",
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, dragOverlay }) => {
+/*
+ * ĐƠN GIẢN HÓA NHỜ @hello-pangea/dnd: không còn cần useSortable,
+ * CSS.Transform, hay tự viết onPointerDown/onPointerUp để phân biệt
+ * click vs kéo nữa. @hello-pangea/dnd's Draggable (ở Board.tsx) tự
+ * gắn ref + draggableProps + dragHandleProps vào div BỌC NGOÀI
+ * component này — toàn bộ logic kéo nằm ở tầng đó, TaskCard chỉ cần
+ * render nội dung thuần + xử lý onClick bình thường, không xung đột
+ * gì với việc kéo cả (vì dragHandleProps đã tách biệt rõ vùng nào
+ * kích hoạt kéo, mặc định là TOÀN BỘ phần tử bọc ngoài — nếu muốn
+ * giới hạn vùng kéo chỉ còn 1 handle nhỏ, xem ghi chú dưới).
+ */
+const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
   const { id, title, priority, assignee, dueDate, status } = task;
 
-  const isOverdue = dueDate && status !== "done" && checkIsOverdue(dueDate);
+  const isOverdue =
+    dueDate && status !== "done" && checkIsOverdue(dueDate, status);
 
   const shortId = id.split("-").slice(-1)[0];
 
-  const sortable = useSortable({ id, disabled: dragOverlay });
-
-  const style = dragOverlay
-    ? undefined
-    : {
-        transform: CSS.Transform.toString(sortable.transform),
-        transition: sortable.transition,
-        opacity: sortable.isDragging ? 0.4 : 1,
-      };
-
   return (
     <div
-      ref={dragOverlay ? undefined : sortable.setNodeRef}
-      style={style}
-      className={`${styles.card} ${dragOverlay ? styles.dragOverlay : ""} ${isOverdue ? styles.overdue : ""}`}
+      className={`${styles.card} ${isOverdue ? styles.overdue : ""}`}
       role="listitem"
       tabIndex={0}
+      onClick={() => onClick?.(task)}
       onKeyDown={(e) => e.key === "Enter" && onClick?.(task)}
       aria-label={title}
-      {...(dragOverlay ? {} : sortable.attributes)}
-      onClick={() => onClick?.(task)}
     >
-      {!dragOverlay && (
-        <div
-          className={styles.dragHandle}
-          {...sortable.listeners}
-          aria-label="Drag to move task"
-        >
-          <IconDragHandle />
-        </div>
-      )}
-
-      {/* Top row: type + id */}
+      {/* Top row: id */}
       <div className={styles.topRow}>
         <span className={styles.taskId}>{shortId}</span>
         {isOverdue && <span className={styles.overdueBadge}>Overdue</span>}
@@ -85,18 +70,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, dragOverlay }) => {
         </span>
 
         <div className={styles.meta}>
-          {/* {assignee && (
-            <div className={styles.avatar} title={assignee.name}>
-              {assignee.avatarUrl ? (
-                <img src={assignee.avatarUrl} alt={assignee.name} />
-              ) : (
-                getInitials(assignee.name)
-              )}
-            </div>
-          )} */}
           {assignee && (
             <div className={styles.avatar} title={assignee.name}>
+              {/* {assignee.avatarUrl ? (
+                <img src={assignee.avatarUrl} alt={assignee.name} />
+              ) : ( */}
               {getInitials(assignee.name)}
+              {/* )} */}
             </div>
           )}
         </div>

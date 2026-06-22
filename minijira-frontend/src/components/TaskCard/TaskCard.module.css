@@ -168,6 +168,10 @@
   border-radius: 50%;
 }
 
+
+.priorityCritical .priorityDot {
+  background: var(--priority-critical);
+}
 .priorityHigh .priorityDot {
   background: var(--priority-high);
 }
@@ -176,6 +180,10 @@
 }
 .priorityLow .priorityDot {
   background: var(--priority-low);
+}
+
+.priorityCritical {
+  color: var(--priority-critical);
 }
 
 .priorityHigh {
