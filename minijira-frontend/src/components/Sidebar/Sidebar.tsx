@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom"; // 1. Import thêm NavLink
 import {
   IconChart,
   IconList,
@@ -10,7 +10,6 @@ import styles from "./Sidebar.module.css";
 import { useAuth } from "../../hooks/useAuth";
 import {
   ROUTE_LOGIN,
-  ARIA_CURRENT_PAGE,
   SIDEBAR_ARIA_LABEL,
   SIDEBAR_NAV_ARIA_LABEL_SUFFIX,
   SIDEBAR_LOG_IN_TEXT,
@@ -23,11 +22,17 @@ import {
 } from "../../constants";
 import React from "react";
 
+// 2. Thêm thuộc tính path và cấu hình end cho từng item
 const navItems = [
-  { id: "board", label: "Board", icon: <LayoutGrid />, active: true },
-  { id: "backlog", label: "Backlog", icon: <IconList /> },
-  { id: "reports", label: "Reports", icon: <IconChart /> },
-  { id: "settings", label: "Settings", icon: <IconSettings /> },
+  { id: "board", label: "Board", icon: <LayoutGrid />, path: "/", end: true }, // Trang chủ (Board)
+  { id: "backlog", label: "Backlog", icon: <IconList />, path: "/backlog" },
+  { id: "reports", label: "Reports", icon: <IconChart />, path: "/reports" },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: <IconSettings />,
+    path: "/settings",
+  },
 ];
 
 interface Props {
@@ -79,17 +84,21 @@ const Sidebar = ({ sidebarOpen, closeSidebar }: Props) => {
         <div id="nav-planning-label" className={styles.navLabel}>
           Planning
         </div>
+
         {navItems.map((item) => (
-          <button
+          <NavLink
             key={item.id}
-            className={`${styles.navItem} ${item.active ? styles.active : ""}`}
-            onClick={closeSidebar}
-            aria-current={item.active ? ARIA_CURRENT_PAGE : undefined}
+            to={item.path}
+            end={item.end} 
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.active : ""}`
+            }
+            onClick={closeSidebar} 
             aria-label={`${item.label} ${SIDEBAR_NAV_ARIA_LABEL_SUFFIX}`}
           >
             <span aria-hidden="true">{item.icon}</span>
             <span className={styles.navItemText}>{item.label}</span>
-          </button>
+          </NavLink>
         ))}
       </nav>
 
@@ -124,7 +133,9 @@ const Sidebar = ({ sidebarOpen, closeSidebar }: Props) => {
             <span aria-hidden="true">
               <IconLogin />
             </span>
-            <span className={styles.navItemText}>{SIDEBAR_LOG_IN_TEXT}</span>{" "}
+            <span className={styles.navItemText}>
+              {SIDEBAR_LOG_IN_TEXT}
+            </span>{" "}
           </button>
         )}
       </div>

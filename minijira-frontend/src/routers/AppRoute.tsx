@@ -10,6 +10,7 @@ import LoadingFallback from "../components/LoadingFallback/LoadingFallback";
 const Home = lazy(() => import("../pages/Home/Home"));
 const Login = lazy(() => import("../pages/Login/Login"));
 const Register = lazy(() => import("../pages/Register/Register"));
+const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 
 const AppRoute = () => {
   return (
@@ -18,6 +19,8 @@ const AppRoute = () => {
         <Route path={ROUTE_PATH_HOME} element={<Home />} />
         <Route path={ROUTE_PATH_LOGIN} element={<Login />} />
         <Route path={ROUTE_PATH_REGISTER} element={<Register />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

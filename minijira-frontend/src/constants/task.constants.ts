@@ -3,7 +3,7 @@ export const STATUS_BACKLOG = "backlog";
 export const STATUS_TODO = "todo";
 export const STATUS_IN_PROGRESS = "in-progress";
 export const STATUS_DONE = "done";
-export const TASK_STATUS_DONE = "done"; // Trùng lặp, dùng chung STATUS_DONE
+export const TASK_STATUS_DONE = "done";
 
 // Giá trị mức độ ưu tiên hệ thống
 export const PRIORITY_LOW = "low";
