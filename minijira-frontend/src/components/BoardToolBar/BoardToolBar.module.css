@@ -7,20 +7,32 @@
   border-bottom: 1px solid var(--color-border-subtle);
   background: var(--color-surface);
   flex-shrink: 0;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Tự động xuống hàng nếu màn hình nhỏ */
 }
 
 .filterGroup {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
-.filterBtn {
+.filterLabel {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* ---- ✨ CSS Dropdown Select ---- */
+.selectWrapper {
+  position: relative;
+}
+
+.filterSelect {
+  padding: 5px 28px 5px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
@@ -29,19 +41,92 @@
   font-weight: 500;
   cursor: pointer;
   font-family: var(--font-sans);
-  transition:
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    background var(--transition-fast);
-  white-space: nowrap;
+  outline: none;
+  transition: all var(--transition-fast);
+  appearance: none; /* Ẩn mũi tên gốc xấu xí của trình duyệt */
+  -webkit-appearance: none;
 }
 
-.filterBtn:hover {
+/* Thêm mũi tên custom đẹp mắt cho thẻ select */
+.selectWrapper::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.filterSelect:hover,
+.filterSelect:focus {
   border-color: var(--color-accent);
   color: var(--color-accent);
   background: var(--color-accent-light);
 }
 
+/* ---- ✨ CSS Nhóm Chọn Nhiều Priority ---- */
+.priorityGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.priorityTitle {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-right: 4px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--color-accent); /* Đổi màu checkbox sang màu hệ thống */
+}
+
+/* ---- ✨ CSS Nhóm Chọn Date Range ---- */
+.dateGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.filterDate {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+.filterDate:focus {
+  border-color: var(--color-accent);
+}
+
+.dateSeparator {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ---- Các phần cũ được giữ nguyên ---- */
 .toolbarSpacer {
   flex: 1;
 }
@@ -72,7 +157,37 @@
   background: var(--color-bg);
   color: var(--color-text-primary);
 }
+
 .viewBtn.active {
   background: var(--color-accent-light);
   color: var(--color-accent);
+}
+
+/* ---- ✨ CSS Nút Clear Filters ---- */
+.clearFiltersBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+  padding: 6px 12px;
+  background: none;
+  border: 1px dashed var(--color-border, #e2e8f0); /* Đường viền đứt nét nhẹ nhàng */
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary, #64748b);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all var(--transition-fast);
+}
+
+.clearFiltersBtn:hover {
+  background: rgba(ef, 44, 44, 0.05); /* Nền hồng đỏ nhạt khi hover */
+  border-color: var(--color-danger, #ef4444);
+  color: var(--color-danger, #ef4444); /* Chuyển màu text sang đỏ nguy hiểm */
+}
+
+/* Tùy chỉnh kích thước icon bên trong nút clear nếu cần */
+.clearFiltersBtn svg {
+  width: 14px;
+  height: 14px;
 }

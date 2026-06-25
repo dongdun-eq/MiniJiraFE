@@ -3,6 +3,23 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import { useAuth } from "../../hooks/useAuth";
+import {
+  ROUTE_PATH_HOME,
+  ROUTE_PATH_REGISTER,
+  FORM_FIELD_EMAIL,
+  FORM_FIELD_PASSWORD,
+  FORM_FIELD_REMEMBER_ME,
+  HTML_ID_EMAIL,
+  HTML_ID_PASSWORD,
+  LOGIN_TEXT_SHOW,
+  LOGIN_TEXT_HIDE,
+  LOGIN_TEXT_LOGGING_IN,
+  LOGIN_TEXT_LOG_IN,
+  LOGIN_VALIDATION_EMAIL_REQUIRED,
+  LOGIN_VALIDATION_EMAIL_INVALID,
+  LOGIN_VALIDATION_PASSWORD_REQUIRED,
+  EMAIL_REGEX_PATTERN,
+} from "../../constants";
 
 interface LoginFormData {
   email: string;
@@ -13,37 +30,33 @@ interface LoginFormData {
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
-  // Khởi tạo React Hook Form
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
+      [FORM_FIELD_EMAIL]: "",
+      [FORM_FIELD_PASSWORD]: "",
+      [FORM_FIELD_REMEMBER_ME]: false,
     },
     mode: "onTouched",
   });
 
   const toRegister = () => {
-    navigate("/register");
+    navigate(ROUTE_PATH_REGISTER);
   };
 
-  // Hàm handle submit chuẩn bài của React Hook Form
   const onSubmit = async (data: LoginFormData) => {
     await login(data.email, data.password);
-    navigate("/");
+    navigate(ROUTE_PATH_HOME);
   };
 
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        {/* Header: Logo & Title */}
         <div className={styles.loginHeader}>
           <div className={styles.logoMark}>
             <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
@@ -62,27 +75,25 @@ const Login: React.FC = () => {
           </p>
         </div>
 
-        {/* Form Đăng nhập */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={styles.loginForm}
           noValidate
         >
-          {/* Email Field */}
           <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.inputLabel}>
+            <label htmlFor={HTML_ID_EMAIL} className={styles.inputLabel}>
               Email Address
             </label>
             <input
               type="email"
-              id="email"
+              id={HTML_ID_EMAIL}
               className={`${styles.inputField} ${errors.email ? styles.inputError : ""}`}
               placeholder="name@company.com"
-              {...register("email", {
-                required: "Email is required",
+              {...register(FORM_FIELD_EMAIL, {
+                required: LOGIN_VALIDATION_EMAIL_REQUIRED,
                 pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
+                  value: EMAIL_REGEX_PATTERN,
+                  message: LOGIN_VALIDATION_EMAIL_INVALID,
                 },
               })}
             />
@@ -91,10 +102,9 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* Password Field */}
           <div className={styles.inputGroup}>
             <div className={styles.labelRow}>
-              <label htmlFor="password" className={styles.inputLabel}>
+              <label htmlFor={HTML_ID_PASSWORD} className={styles.inputLabel}>
                 Password
               </label>
               <a href="#forgot" className={styles.forgotLink}>
@@ -104,11 +114,11 @@ const Login: React.FC = () => {
             <div className={styles.passwordWrapper}>
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
+                id={HTML_ID_PASSWORD}
                 className={`${styles.inputField} ${errors.password ? styles.inputError : ""}`}
                 placeholder="••••••••"
-                {...register("password", {
-                  required: "Password is required",
+                {...register(FORM_FIELD_PASSWORD, {
+                  required: LOGIN_VALIDATION_PASSWORD_REQUIRED,
                 })}
               />
               <button
@@ -117,7 +127,7 @@ const Login: React.FC = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? LOGIN_TEXT_HIDE : LOGIN_TEXT_SHOW}
               </button>
             </div>
             {errors.password && (
@@ -127,31 +137,27 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* Remember me Checkbox */}
           <div className={styles.rememberGroup}>
             <label className={styles.checkboxContainer}>
-              <input type="checkbox" {...register("rememberMe")} />
+              <input type="checkbox" {...register(FORM_FIELD_REMEMBER_ME)} />
               <span className={styles.checkboxCheckmark}></span>
               <span className={styles.checkboxLabel}>Keep me logged in</span>
             </label>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className={styles.submitBtn}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Logging in..." : "Log In"}
+            {isSubmitting ? LOGIN_TEXT_LOGGING_IN : LOGIN_TEXT_LOG_IN}
           </button>
         </form>
 
-        {/* Divider */}
         <div className={styles.divider}>
           <span>or continue with</span>
         </div>
 
-        {/* Social Logins */}
         <div className={styles.socialGroup}>
           <button
             type="button"

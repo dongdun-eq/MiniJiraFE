@@ -8,18 +8,23 @@ import type {
   UpdateTaskStatusDto,
 } from "../types/task.type";
 import api from "./api";
-
-const BASE = "/api/tasks";
+import {
+  API_ENDPOINT_TASKS_BASE,
+  API_ENDPOINT_TASKS_STATUS_SUFFIX,
+} from "../constants";
 
 const taskService = {
   getAll: async (
     queryParam: TaskQueryParam,
     signal?: AbortSignal,
   ): Promise<ListResponse<DetailTaskType>> => {
-    const res = await api.get<ListResponse<DetailTaskType>>(BASE, {
-      params: { ...queryParam },
-      signal,
-    });
+    const res = await api.get<ListResponse<DetailTaskType>>(
+      API_ENDPOINT_TASKS_BASE,
+      {
+        params: { ...queryParam },
+        signal,
+      },
+    );
 
     return res.data;
   },
@@ -28,35 +33,44 @@ const taskService = {
     id: string,
     signal?: AbortSignal,
   ): Promise<SingleResponse<TaskType>> => {
-    const res = await api.get<SingleResponse<TaskType>>(`${BASE}/${id}`, {
-      signal,
-    });
+    const res = await api.get<SingleResponse<TaskType>>(
+      `${API_ENDPOINT_TASKS_BASE}/${id}`,
+      {
+        signal,
+      },
+    );
 
     return res.data;
   },
 
   create: async (dto: CreateTaskDto) => {
-    const res = await api.post<SingleResponse<TaskType>>(BASE, dto);
+    const res = await api.post<SingleResponse<TaskType>>(
+      API_ENDPOINT_TASKS_BASE,
+      dto,
+    );
 
     return res.data;
   },
 
   update: async (id: string, dto: UpdateTaskDto) => {
-    const res = await api.put<SingleResponse<TaskType>>(`${BASE}/${id}`, dto);
+    const res = await api.put<SingleResponse<TaskType>>(
+      `${API_ENDPOINT_TASKS_BASE}/${id}`,
+      dto,
+    );
 
     return res.data;
   },
 
   updateStatus: async (id: string, dto: UpdateTaskStatusDto) => {
     const res = await api.patch<SingleResponse<TaskType>>(
-      `${BASE}/${id}/status`,
+      `${API_ENDPOINT_TASKS_BASE}/${id}${API_ENDPOINT_TASKS_STATUS_SUFFIX}`,
       dto,
     );
     return res.data;
   },
 
   delete: async (id: string) => {
-    await api.delete(`${BASE}/${id}`);
+    await api.delete(`${API_ENDPOINT_TASKS_BASE}/${id}`);
   },
 };
 

@@ -2,11 +2,16 @@
   display: flex;
   flex-direction: column;
   width: var(--column-width);
-  min-width: var(--column-min-width);
+  min-width: var(
+    --column-min-width,
+    240px
+  ); 
+
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   flex-shrink: 0;
+
 }
 
 .header {
@@ -99,6 +104,14 @@
   color: var(--color-accent);
 }
 
+/*
+ * HƯỚNG 1 — THAY ĐỔI QUAN TRỌNG NHẤT:
+ * Bỏ overflow-y: auto -> đổi thành visible. .taskList giờ KHÔNG còn
+ * là scroll container riêng nữa — nó cao theo đúng tổng chiều cao
+ * các task card thật, không giới hạn/cắt. Cuộn dọc thật (nếu cột
+ * dài hơn viewport) xảy ra ở .scroll (Board.module.css), không phải
+ * ở đây. Đây chính là thay đổi loại bỏ "2 lớp scroll lồng nhau".
+ */
 .taskList {
   flex: 1;
   overflow: visible;
@@ -166,4 +179,22 @@
 }
 .limitFill.over {
   background: var(--priority-high);
+}
+
+/*
+ * Responsive min-width — đảm bảo cột không quá rộng so với màn hình
+ * nhỏ, để vẫn thấy được rìa cột kế tiếp khi cuộn ngang trên mobile,
+ * nhưng cũng không quá hẹp khiến nội dung task bị bóp.
+ */
+@media (max-width: 768px) {
+  .column {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 375px) {
+  .column {
+    min-width: 260px; /* gần khớp viewport 375px, mỗi lần cuộn thấy rõ 1 cột */
+    width: calc(100vw - 32px); /* trừ padding 2 bên (16px mỗi bên) */
+  }
 }

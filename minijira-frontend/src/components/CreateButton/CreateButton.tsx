@@ -1,9 +1,20 @@
 import { IconPlus } from "../Icons/Icons";
+import {
+  CREATE_BUTTON_ARIA_LABEL,
+  CREATE_BUTTON_TEXT,
+  CREATE_BUTTON_KEYSHORTCUTS_DEFAULT,
+  COLOR_ACCENT_DEFAULT,
+  COLOR_ACCENT_HOVER,
+} from "../../constants";
 
-const CreateButton = ({
-  handleClick,
-}: {
+interface CreateButtonProps {
   handleClick: () => void;
+  "aria-keyshortcuts"?: string;
+}
+
+const CreateButton: React.FC<CreateButtonProps> = ({
+  handleClick,
+  "aria-keyshortcuts": keyShortcuts = CREATE_BUTTON_KEYSHORTCUTS_DEFAULT, 
 }) => (
   <button
     style={{
@@ -11,7 +22,7 @@ const CreateButton = ({
       alignItems: "center",
       gap: "6px",
       padding: "6px 14px",
-      background: "var(--color-accent)",
+      background: COLOR_ACCENT_DEFAULT, 
       color: "#fff",
       border: "none",
       borderRadius: "var(--radius-md)",
@@ -23,15 +34,19 @@ const CreateButton = ({
       whiteSpace: "nowrap",
     }}
     onClick={handleClick}
-    onMouseEnter={(e) =>
-      (e.currentTarget.style.background = "var(--color-accent-hover)")
+    onMouseEnter={
+      (e) => (e.currentTarget.style.background = COLOR_ACCENT_HOVER) 
     }
-    onMouseLeave={(e) =>
-      (e.currentTarget.style.background = "var(--color-accent)")
+    onMouseLeave={
+      (e) => (e.currentTarget.style.background = COLOR_ACCENT_DEFAULT) 
     }
+    aria-label={CREATE_BUTTON_ARIA_LABEL} 
+    aria-keyshortcuts={keyShortcuts}
   >
-    <IconPlus />
-    <span>Create</span>
+    <span aria-hidden="true">
+      <IconPlus />
+    </span>
+    <span>{CREATE_BUTTON_TEXT}</span> 
   </button>
 );
 

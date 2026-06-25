@@ -1,8 +1,11 @@
 import type { Priority, Status } from ".";
 
 export interface TaskQueryParam {
+  search?: string;
+  minDueDate?: string;
+  maxDueDate?: string;
   status?: string;
-  priority?: Priority;
+  priority?: string;
   assigneeId?: string;
   page?: number;
   limit?: number;

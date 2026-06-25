@@ -5,20 +5,25 @@ import {
   taskModalReducer,
   type TaskModalData,
 } from "./taskModalReducer";
+import {
+  TASK_MODAL_ACTION_OPEN_CREATE,
+  TASK_MODAL_ACTION_OPEN_EDIT,
+  TASK_MODAL_ACTION_CLOSE,
+} from "../../constants";
 
 const TaskModalContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(taskModalReducer, initialTaskModalState);
 
   const openCreate = useCallback(() => {
-    dispatch({ type: "OPEN_CREATE" });
+    dispatch({ type: TASK_MODAL_ACTION_OPEN_CREATE });
   }, []);
 
   const openEdit = useCallback((data: TaskModalData & { id: string }) => {
-    dispatch({ type: "OPEN_EDIT", payload: data });
+    dispatch({ type: TASK_MODAL_ACTION_OPEN_EDIT, payload: data });
   }, []);
 
   const close = useCallback(() => {
-    dispatch({ type: "CLOSE" });
+    dispatch({ type: TASK_MODAL_ACTION_CLOSE });
   }, []);
 
   const value = useMemo(

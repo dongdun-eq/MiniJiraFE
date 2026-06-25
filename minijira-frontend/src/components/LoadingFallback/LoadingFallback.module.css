@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  font-family: var(--font-sans);
+  transition: background-color var(--transition-base);
+}
+
+.spinnerWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Vòng xoay lớn phía ngoài */
+.spinnerOuter {
+  width: 64px;
+  height: 64px;
+  border: 4px solid rgba(59, 91, 219, 0.2); /* Sử dụng mã màu gốc của --color-accent dạng rgba */
+  border-top-color: var(--color-accent);
+  border-radius: var(--radius-pill);
+  animation: spin 1s linear infinite;
+}
+
+/* Vòng xoay nhỏ phía trong chạy ngược chiều */
+.spinnerInner {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 4px solid rgba(59, 91, 219, 0.05);
+  border-bottom-color: var(--color-accent);
+  border-radius: var(--radius-pill);
+  animation: spinReverse 1s linear infinite;
+}
+
+/* Chữ tiêu đề có hiệu ứng mờ tỏ */
+.title {
+  margin-top: var(--space-6);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  letter-spacing: 0.05em;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Chữ phụ giải thích */
+.subtitle {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* --- Các hiệu ứng Animation --- */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

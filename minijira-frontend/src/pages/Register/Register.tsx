@@ -3,6 +3,32 @@ import { useForm, useWatch } from "react-hook-form";
 import styles from "./Register.module.css";
 import type { RegisterDto } from "../../types/auth.type";
 import authService from "../../service/auth.service";
+import {
+  ROUTE_PATH_LOGIN,
+  FORM_FIELD_NAME,
+  FORM_FIELD_EMAIL,
+  FORM_FIELD_AVATAR_URL,
+  FORM_FIELD_PASSWORD,
+  FORM_FIELD_CONFIRM_PASSWORD,
+  HTML_ID_NAME,
+  HTML_ID_EMAIL,
+  HTML_ID_IMAGE_URL,
+  HTML_ID_PASSWORD,
+  HTML_ID_CONFIRM_PASSWORD,
+  REGISTER_TEXT_SHOW,
+  REGISTER_TEXT_HIDE,
+  REGISTER_TEXT_CREATING_ACCOUNT,
+  REGISTER_TEXT_SIGN_UP,
+  REGISTER_VALIDATION_NAME_REQUIRED,
+  REGISTER_VALIDATION_EMAIL_REQUIRED,
+  REGISTER_VALIDATION_EMAIL_INVALID,
+  REGISTER_VALIDATION_URL_INVALID,
+  REGISTER_VALIDATION_PASSWORD_REQUIRED,
+  REGISTER_VALIDATION_CONFIRM_PASSWORD_REQUIRED,
+  REGISTER_VALIDATION_PASSWORD_MISMATCH,
+  EMAIL_REGEX_PATTERN,
+  URL_REGEX_PATTERN,
+} from "../../constants";
 
 interface RegisterFormData {
   name: string;
@@ -23,17 +49,16 @@ const Register: React.FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      avatarUrl: "",
+      [FORM_FIELD_NAME]: "",
+      [FORM_FIELD_EMAIL]: "",
+      [FORM_FIELD_PASSWORD]: "",
+      [FORM_FIELD_CONFIRM_PASSWORD]: "",
+      [FORM_FIELD_AVATAR_URL]: "",
     },
     mode: "onTouched",
   });
 
-  // Theo dõi giá trị password để so sánh với confirmPassword
-  const passwordValue = useWatch({ name: "password", control });
+  const passwordValue = useWatch({ name: FORM_FIELD_PASSWORD, control });
 
   const onSubmit = async (data: RegisterFormData) => {
     const registerDto: RegisterDto = {
@@ -43,10 +68,8 @@ const Register: React.FC = () => {
       ...(data.avatarUrl && { avatarUrl: data.avatarUrl }),
     };
     try {
-      console.log(registerDto);
       await authService.register(registerDto);
     } catch (error) {
-      console.log("Error when register");
       console.log(error);
     }
   };
@@ -54,7 +77,6 @@ const Register: React.FC = () => {
   return (
     <div className={styles.registerContainer}>
       <div className={styles.registerCard}>
-        {/* Header */}
         <div className={styles.registerHeader}>
           <div className={styles.logoMark}>
             <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
@@ -73,44 +95,43 @@ const Register: React.FC = () => {
           </p>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={styles.registerForm}
           noValidate
         >
-          {/* Name */}
           <div className={styles.inputGroup}>
-            <label htmlFor="name" className={styles.inputLabel}>
+            <label htmlFor={HTML_ID_NAME} className={styles.inputLabel}>
               Full Name
             </label>
             <input
               type="text"
-              id="name"
+              id={HTML_ID_NAME}
               className={`${styles.inputField} ${errors.name ? styles.inputError : ""}`}
               placeholder="John Doe"
-              {...register("name", { required: "Full name is required" })}
+              {...register(FORM_FIELD_NAME, {
+                required: REGISTER_VALIDATION_NAME_REQUIRED,
+              })}
             />
             {errors.name && (
               <span className={styles.errorText}>{errors.name.message}</span>
             )}
           </div>
 
-          {/* Email (emai) */}
           <div className={styles.inputGroup}>
-            <label htmlFor="emai" className={styles.inputLabel}>
+            <label htmlFor={HTML_ID_EMAIL} className={styles.inputLabel}>
               Email Address
             </label>
             <input
               type="email"
-              id="emai"
+              id={HTML_ID_EMAIL}
               className={`${styles.inputField} ${errors.email ? styles.inputError : ""}`}
               placeholder="name@company.com"
-              {...register("email", {
-                required: "Email is required",
+              {...register(FORM_FIELD_EMAIL, {
+                required: REGISTER_VALIDATION_EMAIL_REQUIRED,
                 pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
+                  value: EMAIL_REGEX_PATTERN,
+                  message: REGISTER_VALIDATION_EMAIL_INVALID,
                 },
               })}
             />
@@ -119,21 +140,19 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Image URL (Optional) */}
           <div className={styles.inputGroup}>
-            <label htmlFor="imageUrl" className={styles.inputLabel}>
+            <label htmlFor={HTML_ID_IMAGE_URL} className={styles.inputLabel}>
               Avatar URL (Optional)
             </label>
             <input
               type="url"
-              id="imageUrl"
+              id={HTML_ID_IMAGE_URL}
               className={`${styles.inputField} ${errors.avatarUrl ? styles.inputError : ""}`}
               placeholder="https://example.com/avatar.jpg"
-              {...register("avatarUrl", {
+              {...register(FORM_FIELD_AVATAR_URL, {
                 pattern: {
-                  value:
-                    /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i,
-                  message: "Invalid URL format",
+                  value: URL_REGEX_PATTERN,
+                  message: REGISTER_VALIDATION_URL_INVALID,
                 },
               })}
             />
@@ -144,23 +163,18 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Password */}
           <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.inputLabel}>
+            <label htmlFor={HTML_ID_PASSWORD} className={styles.inputLabel}>
               Password
             </label>
             <div className={styles.passwordWrapper}>
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
+                id={HTML_ID_PASSWORD}
                 className={`${styles.inputField} ${styles.passwordInput} ${errors.password ? styles.inputError : ""}`}
                 placeholder="••••••••"
-                {...register("password", {
-                  required: "Password is required",
-                  //   minLength: {
-                  //     value: 6,
-                  //     message: "Password must be at least 6 characters",
-                  //   },
+                {...register(FORM_FIELD_PASSWORD, {
+                  required: REGISTER_VALIDATION_PASSWORD_REQUIRED,
                 })}
               />
               <button
@@ -168,7 +182,7 @@ const Register: React.FC = () => {
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? REGISTER_TEXT_HIDE : REGISTER_TEXT_SHOW}
               </button>
             </div>
             {errors.password && (
@@ -178,21 +192,24 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Confirm Password */}
           <div className={styles.inputGroup}>
-            <label htmlFor="confirmPassword" className={styles.inputLabel}>
+            <label
+              htmlFor={HTML_ID_CONFIRM_PASSWORD}
+              className={styles.inputLabel}
+            >
               Confirm Password
             </label>
             <div className={styles.passwordWrapper}>
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
+                id={HTML_ID_CONFIRM_PASSWORD}
                 className={`${styles.inputField} ${styles.passwordInput} ${errors.confirmPassword ? styles.inputError : ""}`}
                 placeholder="••••••••"
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
+                {...register(FORM_FIELD_CONFIRM_PASSWORD, {
+                  required: REGISTER_VALIDATION_CONFIRM_PASSWORD_REQUIRED,
                   validate: (value) =>
-                    value === passwordValue || "Passwords do not match",
+                    value === passwordValue ||
+                    REGISTER_VALIDATION_PASSWORD_MISMATCH,
                 })}
               />
               <button
@@ -200,7 +217,7 @@ const Register: React.FC = () => {
                 className={styles.passwordToggle}
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? "Hide" : "Show"}
+                {showConfirmPassword ? REGISTER_TEXT_HIDE : REGISTER_TEXT_SHOW}
               </button>
             </div>
             {errors.confirmPassword && (
@@ -210,18 +227,19 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className={styles.submitBtn}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Creating account..." : "Sign Up"}
+            {isSubmitting
+              ? REGISTER_TEXT_CREATING_ACCOUNT
+              : REGISTER_TEXT_SIGN_UP}
           </button>
         </form>
 
         <div className={styles.loginRedirect}>
-          Already have an account? <a href="/login">Log in</a>
+          Already have an account? <a href={ROUTE_PATH_LOGIN}>Log in</a>
         </div>
       </div>
     </div>

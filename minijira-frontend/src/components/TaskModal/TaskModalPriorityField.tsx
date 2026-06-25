@@ -4,28 +4,33 @@ import { PRIORITY_OPTIONS } from "../../data/taskModalStaticData";
 import styles from "./TaskModal.module.css";
 import { IconChevron } from "../Icons/Icons";
 import type { TaskFormData } from "./TaskModal";
+import {
+  FORM_FIELD_PRIORITY,
+  HTML_ID_TASK_PRIORITY,
+  PRIORITY_FIELD_LABEL,
+} from "../../constants";
 
 const TaskModalPriorityField = () => {
   const { register, control } = useFormContext<TaskFormData>();
 
   const priorityValue = useWatch({
     control,
-    name: "priority",
+    name: FORM_FIELD_PRIORITY,
   });
 
   const priorityMeta = PRIORITY_OPTIONS.find((p) => p.value === priorityValue)!;
 
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor="task-priority">
-        Priority
+      <label className={styles.label} htmlFor={HTML_ID_TASK_PRIORITY}>
+        {PRIORITY_FIELD_LABEL}
       </label>
       <div className={styles.priorityDisplay}>
         <select
-          id="task-priority"
+          id={HTML_ID_TASK_PRIORITY} 
           className={styles.prioritySelect}
-          {...register("priority", {})}
-          aria-label="Priority"
+          {...register(FORM_FIELD_PRIORITY, {})} 
+          aria-label={PRIORITY_FIELD_LABEL} 
         >
           {PRIORITY_OPTIONS.map((p) => (
             <option key={p.value} value={p.value}>

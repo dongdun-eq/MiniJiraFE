@@ -195,3 +195,41 @@ export const IconLogin = () => (
     <line x1="15" y1="12" x2="3" y2="12" />
   </svg>
 );
+
+export const IconSuccess = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+    <path
+      d="M5.5 9l2.5 2.5 4.5-5"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const IconError = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+    <path
+      d="M9 5.5v4M9 12v.01"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+export const IconInfo = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+    <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" />
+    <path
+      d="M9 8v4.5M9 5.5v.01"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+

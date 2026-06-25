@@ -7,15 +7,10 @@ import AppLayout from "../../layouts/AppLayout/AppLayout";
 function GlobalModal() {
   const { state, close } = useTaskModalContext();
 
-  const handleDelete = (id: string) => {
-    console.log("DELETE", id);
-  };
-
   return (
     <TaskModal
       isOpen={state.isOpen}
       initialData={state.data ?? undefined}
-      onDelete={state.data?.id ? handleDelete : undefined}
       onClose={close}
     />
   );

@@ -267,6 +267,15 @@
   transition: background var(--transition-fast);
 }
 
+.priorityDisplay:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.15); /* Tăng nhẹ opacity cho viền xanh rõ hơn */
+}
+
+.dotCritical {
+  background: var(--priority-critical);
+}
+
 .dotHigh {
   background: var(--priority-high);
 }
@@ -281,6 +290,11 @@
   flex: 1;
   font-size: var(--text-base);
 }
+
+.priorityLabelCritical {
+  color: var(--priority-critical);
+}
+
 .priorityLabelHigh {
   color: var(--priority-high);
 }

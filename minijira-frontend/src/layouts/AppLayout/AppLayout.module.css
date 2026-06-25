@@ -30,6 +30,55 @@
   font-weight: 600;
   color: var(--color-text-primary);
   letter-spacing: -0.2px;
+  flex-shrink: 0;
+}
+
+/* ---- Thanh Search ---- */
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  margin-left: var(--space-4);
+}
+
+.searchInput {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  padding-right: 32px;
+  font-size: var(--text-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.searchInput:focus {
+  border-color: var(--color-primary, #3b82f6);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.searchClear {
+  position: absolute;
+  right: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.searchClear:hover {
+  background: var(--color-border);
+  color: var(--color-text-primary);
 }
 
 .topbarSpacer {
@@ -40,6 +89,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 .menuToggle {
@@ -79,7 +129,6 @@
 
 /* ---- Mobile ---- */
 @media (max-width: 768px) {
-
   .overlay.visible {
     display: block;
   }
@@ -91,15 +140,26 @@
   .topbarTitle {
     font-size: var(--text-md);
   }
+
+  .searchWrapper {
+    max-width: 200px;
+    margin-left: var(--space-2);
+  }
+}
+
+@media (max-width: 520px) {
+  .topbarTitle {
+    display: none;
+  }
+  .searchWrapper {
+    max-width: 100%;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 375px) {
   .topbar {
     padding: 0 var(--space-3);
     gap: var(--space-2);
-  }
-
-  .topbarTitle {
-    font-size: var(--text-base);
   }
 }

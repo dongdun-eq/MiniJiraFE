@@ -3,6 +3,22 @@ import type { DetailTaskType } from "../../types/task.type";
 import styles from "./TaskCard.module.css";
 import { checkIsOverdue } from "../../helpers/task.helper";
 import { getInitials } from "../../utils/nameUtils";
+import {
+  KEYBOARD_KEY_ENTER,
+  TASK_STATUS_DONE,
+  TASK_CARD_ARIA_PREFIX,
+  TASK_CARD_ARIA_OVERDUE,
+  TASK_CARD_ARIA_TITLE_LABEL,
+  TASK_CARD_ARIA_PRIORITY_LABEL,
+  TASK_CARD_ARIA_ASSIGNED_TO,
+  TASK_CARD_ARIA_UNASSIGNED,
+  TASK_CARD_ARIA_SHORTCUT_HINT,
+  TASK_PRIORITY_CRITICAL,
+  TASK_PRIORITY_HIGH,
+  TASK_PRIORITY_MEDIUM,
+  TASK_PRIORITY_LOW,
+  TASK_PRIORITY_NONE,
+} from "../../constants";
 
 interface TaskCardProps {
   task: DetailTaskType;
@@ -17,51 +33,54 @@ const PRIORITY_STYLE: Record<string, string> = {
 };
 
 const PRIORITY_LABEL: Record<string, string> = {
-  critical: "Critical",
-  high: "High",
-  medium: "Medium",
-  low: "Low",
+  critical: TASK_PRIORITY_CRITICAL,
+  high: TASK_PRIORITY_HIGH,
+  medium: TASK_PRIORITY_MEDIUM,
+  low: TASK_PRIORITY_LOW,
 };
 
-/*
- * ĐƠN GIẢN HÓA NHỜ @hello-pangea/dnd: không còn cần useSortable,
- * CSS.Transform, hay tự viết onPointerDown/onPointerUp để phân biệt
- * click vs kéo nữa. @hello-pangea/dnd's Draggable (ở Board.tsx) tự
- * gắn ref + draggableProps + dragHandleProps vào div BỌC NGOÀI
- * component này — toàn bộ logic kéo nằm ở tầng đó, TaskCard chỉ cần
- * render nội dung thuần + xử lý onClick bình thường, không xung đột
- * gì với việc kéo cả (vì dragHandleProps đã tách biệt rõ vùng nào
- * kích hoạt kéo, mặc định là TOÀN BỘ phần tử bọc ngoài — nếu muốn
- * giới hạn vùng kéo chỉ còn 1 handle nhỏ, xem ghi chú dưới).
- */
 const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
   const { id, title, priority, assignee, dueDate, status } = task;
 
   const isOverdue =
-    dueDate && status !== "done" && checkIsOverdue(dueDate, status);
+    dueDate && status !== TASK_STATUS_DONE && checkIsOverdue(dueDate, status);
 
   const shortId = id.split("-").slice(-1)[0];
+
+  const ariaDescription = [
+    `${TASK_CARD_ARIA_PREFIX} ${shortId}`,
+    isOverdue ? TASK_CARD_ARIA_OVERDUE : "",
+    `${TASK_CARD_ARIA_TITLE_LABEL} ${title}`,
+    `${TASK_CARD_ARIA_PRIORITY_LABEL} ${PRIORITY_LABEL[priority] ?? TASK_PRIORITY_NONE}`,
+    assignee
+      ? `${TASK_CARD_ARIA_ASSIGNED_TO} ${assignee.name}`
+      : TASK_CARD_ARIA_UNASSIGNED,
+    TASK_CARD_ARIA_SHORTCUT_HINT,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <div
       className={`${styles.card} ${isOverdue ? styles.overdue : ""}`}
-      role="listitem"
+      role="button"
       tabIndex={0}
       onClick={() => onClick?.(task)}
-      onKeyDown={(e) => e.key === "Enter" && onClick?.(task)}
-      aria-label={title}
+      onKeyDown={(e) => e.key === KEYBOARD_KEY_ENTER && onClick?.(task)}
+      aria-label={ariaDescription}
     >
-      {/* Top row: id */}
-      <div className={styles.topRow}>
+      <div aria-hidden="true" className={styles.topRow}>
         <span className={styles.taskId}>{shortId}</span>
-        {isOverdue && <span className={styles.overdueBadge}>Overdue</span>}
+        {isOverdue && (
+          <span className={styles.overdueBadge}>{TASK_CARD_ARIA_OVERDUE}</span>
+        )}
       </div>
 
-      {/* Title */}
-      <p className={styles.title}>{title}</p>
+      <p aria-hidden="true" className={styles.title}>
+        {title}
+      </p>
 
-      {/* Bottom row: priority + meta */}
-      <div className={styles.bottomRow}>
+      <div aria-hidden="true" className={styles.bottomRow}>
         <span
           className={`${styles.priority} ${PRIORITY_STYLE[priority] ?? ""}`}
         >
@@ -72,11 +91,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
         <div className={styles.meta}>
           {assignee && (
             <div className={styles.avatar} title={assignee.name}>
-              {/* {assignee.avatarUrl ? (
-                <img src={assignee.avatarUrl} alt={assignee.name} />
-              ) : ( */}
               {getInitials(assignee.name)}
-              {/* )} */}
             </div>
           )}
         </div>
@@ -85,4 +100,4 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
   );
 };
 
-export default TaskCard;
+export default React.memo(TaskCard);
