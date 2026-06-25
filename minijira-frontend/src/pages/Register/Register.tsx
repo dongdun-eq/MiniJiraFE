@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import styles from "./Register.module.css";
 import type { RegisterDto } from "../../types/auth.type";
-import authService from "../../service/auth.service";
 import {
   ROUTE_PATH_LOGIN,
   FORM_FIELD_NAME,
@@ -29,6 +28,8 @@ import {
   EMAIL_REGEX_PATTERN,
   URL_REGEX_PATTERN,
 } from "../../constants";
+import { useAuthMutations } from "../../hooks/auth.hook";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterFormData {
   name: string;
@@ -58,6 +59,8 @@ const Register: React.FC = () => {
     mode: "onTouched",
   });
 
+  const { register: registerUser, isRegistering } = useAuthMutations();
+  const navigate = useNavigate()
   const passwordValue = useWatch({ name: FORM_FIELD_PASSWORD, control });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -68,9 +71,10 @@ const Register: React.FC = () => {
       ...(data.avatarUrl && { avatarUrl: data.avatarUrl }),
     };
     try {
-      await authService.register(registerDto);
-    } catch (error) {
-      console.log(error);
+      await registerUser(registerDto);
+      navigate(ROUTE_PATH_LOGIN);
+    } catch {
+      /* empty */
     }
   };
 
@@ -227,12 +231,12 @@ const Register: React.FC = () => {
             )}
           </div>
 
-          <button
+           <button
             type="submit"
             className={styles.submitBtn}
-            disabled={isSubmitting}
+            disabled={isRegistering}
           >
-            {isSubmitting
+            {isRegistering || isSubmitting
               ? REGISTER_TEXT_CREATING_ACCOUNT
               : REGISTER_TEXT_SIGN_UP}
           </button>

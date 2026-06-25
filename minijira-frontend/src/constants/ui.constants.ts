@@ -86,6 +86,8 @@ export const TOAST_SUCCESS_TASK_UPDATED = "Task updated";
 export const TOAST_SUCCESS_TASK_DELETED = "Task deleted";
 export const TOAST_SUCCESS_LOGIN = "Logged in successfully";
 export const TOAST_SUCCESS_LOGOUT = "Logged out";
+export const TOAST_SUCCESS_REGISTER = "Register successfully";
+export const TOAST_ERROR_REGISTER_FAILED = "Register failed";
 
 // Lỗi nghiệp vụ hoặc Lỗi Context hệ thống
 export const TOAST_ERROR_TASK_CREATE_FAILED = "Failed to create task";
